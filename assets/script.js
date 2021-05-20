@@ -59,6 +59,7 @@ var questionIndex = 0;
 var currentTime = document.querySelector('#seconds');
 var questionContent = document.querySelector("#questions");
 var heading = document.querySelector(".heading");
+var buttonWrapper = document.querySelector("#button-wrapper");
 var penalty = 10;
 var ulCreate = document.createElement('ul');
 var startBtn = document.querySelector("#start-quiz");
@@ -89,6 +90,8 @@ startBtn.addEventListener("click", function () {
 function displayQuestion (questionIndex) {
   questionContent.innerHTML = "";
   ulCreate.innerHTML = "";
+  buttonWrapper.innerHTML = "";
+
   for (var i = 0; i <questions.length; i ++) {
     var renderQuestion = questions[questionIndex].question;
     var renderOptions = questions[questionIndex].options;
@@ -133,13 +136,24 @@ function checkAnswer(event) {
 function quizCompleted () {
   heading.innerHTML = "";
   questionContent.innerHTML = "";
-  timeLeft.innerHTML = "";
+  seconds.textContent = timeLeft;
 
   var newH1 = document.createElement("h1");
   newH1.setAttribute("id", "finalH1");
   newH1.textContent = "The Quiz is Over!";
-
   questionContent.appendChild(newH1);
+
+  var pTag = document.createElement("p");
+  pTag.setAttribute("id", "pTag");
+  questionContent.appendChild(pTag);
+
+  if (timeLeft >=0) {
+    var timeScore = timeLeft;
+    var newPtag = document.createElement("p");
+    clearInterval(timeInterval);
+    pTag.textContent = "Your score is " + timeScore;
+    questionContent.appendChild(newPtag);
+  }
 }
 
 
