@@ -18,6 +18,8 @@ nav {
 main {
   font-size: 20px;
   text-align:center;
+  display:flex;
+  justify-content: space-between;
 }
 
 h1 {
@@ -29,6 +31,11 @@ main {
   text-align: center;
   font-size: 20px;
 }
+
+#questions.text {
+  padding: 20px;
+}
+
 
 .btn {
   font-size: 15px;
@@ -42,11 +49,18 @@ main {
   margin-top: 25px;
 }
 
+button:hover,
+li:hover {
+  background-color: lightblue;
+  color: black;
+}
+
 li {
   background-color: blue;
   padding: 15px;
   color: white;
   margin: 5px;
+  font-size: 20px;
 }
 
 ul {

@@ -61,6 +61,7 @@ var questionContent = document.querySelector("#questions");
 var heading = document.querySelector(".heading");
 var buttonWrapper = document.querySelector("#button-wrapper");
 var penalty = 10;
+var points = 5;
 var ulCreate = document.createElement('ul');
 var startBtn = document.querySelector("#start-quiz");
 var seconds = document.querySelector("#seconds")
@@ -105,7 +106,7 @@ function displayQuestion (questionIndex) {
     listItem.addEventListener("click", (checkAnswer));
   })
 }
-
+//compares player answer to the correct solution
 function checkAnswer(event) {
   var element = event.target;
 
@@ -116,9 +117,12 @@ function checkAnswer(event) {
       if (element.textContent == questions[questionIndex].answer) {
           score++;
           createDiv.textContent = "Correct!";
+          timeLeft = timeLeft + points;
+          createDiv.setAttribute("style", "color:green; padding: 20px");
       } else {
             timeLeft = timeLeft - penalty;
             createDiv.textContent = "Incorrect!";
+            createDiv.setAttribute("style", "color:red; padding: 20px");
       }
 
       questionIndex++;
@@ -126,6 +130,7 @@ function checkAnswer(event) {
       if (questionIndex >= questions.length) {
         quizCompleted();
         createDiv.textContent = "You have finished the quiz! You got  " + score + "/" + questions.length + " correct!";
+        createDiv.setAttribute("style", "color:black; padding: 20px; border-top: 0px;");
       } else {
         displayQuestion(questionIndex);
       }
@@ -154,6 +159,49 @@ function quizCompleted () {
     pTag.textContent = "Your score is " + timeScore;
     questionContent.appendChild(newPtag);
   }
+
+  var nameInput = document.createElement("input");
+  nameInput.setAttribute("type", "text");
+  nameInput.placeholder = "Enter your name/initials here!";
+  nameInput.setAttribute("style", "border: 2px solid black; font-size: 25px; text-align: center; border-radius:20px; background-color: lightblue; color: red; font-weight: bold; margin: 20px; padding: 20px; width: 80%;")
+  questionContent.appendChild(nameInput);
+
+  var scoreSubmit = document.createElement("button");
+  scoreSubmit.setAttribute("type", "submit");
+  scoreSubmit.setAttribute("style", "font-size: 30px; border-radius: 20px; background-color: blue; color: white; padding: 10px; margin: auto; display: block;");
+  scoreSubmit.textContent = "Submit";
+  questionContent.appendChild(scoreSubmit);
+
+  var returnSubmit = document.createElement("button");
+  returnSubmit.setAttribute("type", "submit");
+  returnSubmit.setAttribute("style", "font-size: 30px; border-radius: 20px; background-color: orange; color: blue; padding: 10px; margin: auto; margin-top: 20px; display: block");
+  returnSubmit.textContent = "REDO";
+  questionContent.appendChild(returnSubmit);
+
+  returnSubmit.addEventListener("click", function() {
+    window.location.replace("./index.html");
+  })
+
+
+  /*scoreSubmit.addEventListener("click", function() {
+    var playerInit = newScore.value;
+    if (playerInit === null) {
+      alert('You must enter in your initials! Try Again');
+    } else {
+      var finalScore = {
+        playerInit: playerInit,
+        score: timeScore
+      }
+      var topScores = localStorage.getITem("topScores");
+      if (topScores === null) {
+        topScores = [];
+      } else {
+        topScores = JSON.parse(topScores);
+      }
+      topScores.push(finalScore);
+      var newScore = JSON.stringify(allScores);
+      localStorage.setItem("topScores", newScore);
+    }
+  })
+}*/
 }
-
-
