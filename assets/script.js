@@ -9,158 +9,137 @@ WHEN all questions are answered or the timer reaches 0
 THEN the game is over
 WHEN the game is over
 THEN I can save my initials and score */
+//will contain a question grabbed from an array
 
-var body = document.body;
-var p1El = document.createElement('p');
-var p2El = document.createElement('p');
-var p3El = document.createElement('p');
-var div = document.createElement('div');
-
-p1El.textContent = 'View High Scores';
-p2El.textContent = 'Time:';
-p3El.textContent = "";
-p1El.setAttribute('style','width: 100%;');
-p2El.setAttribute('style','width:100%; text-align: right;');
-
-div.setAttribute('style', 'display: flex;')
-
-div.appendChild(p1El);
-div.appendChild(p2El);
-div.appendChild(p3El);
-document.body.appendChild(div);
-
-var h2El = document.createElement('h2');
-h2El.textContent =
-  'Coding Quiz Challenge';
-h2El.setAttribute('style', 'width:100%; text-align:center;');
-body.appendChild(h2El);
-
-var mainContent = document.createElement('div');
-mainContent.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by 10 seconds"
-mainContent.setAttribute('style', 'font-size: 25px; text-align: center;');
-body.appendChild(mainContent);
-var btnEl = document.createElement('button');
-btnEl.setAttribute('style', 'font-size: 20px; margin: auto; display: flex; justify-content; center; padding: 20px; border-radius: 25px; background-color: purple; color: white; margin-top: 25px;');
-btnEl.textContent = 'Start Quiz';
-body.appendChild(btnEl);
-btnEl.setAttribute("id", "start-quiz");
-
-var begin = document.querySelector('#start-quiz');
-begin.addEventListener('click', function (){
-  startQuiz();
-})
-
-
-function startQuiz () {
-
-  //tracks correct answers
-  var correctAnswers = 0;
-
-  //will contain a question grabbed from an array
-  var questions = [
+var questions = [
   {
-    question: "Commonly used data types DO NOT include:",
-    a: "Strings",
-    b: "Booleans",
-    c: "Alerts",
-    d: "Numbers",
-    answer: "c"
+  question: "Commonly used data types DO NOT include:",
+  options: ["Strings",
+            "Booleans",
+            "Alerts",
+            "Numbers"],
+  answer:   "Alerts",
   },
   {
-    question: "Insie which HTML element do we put the JavaScript?",
-    a: "<scripting>",
-    b: "<script>",
-    c: "<js>",
-    d: "<javascript",
-    answer: "b" 
+  question: "Inside which HTML element do we put the JavaScript?",
+  options:  ["<scripting>",
+            "<script>",
+            "<js>",
+            "<javascript>",],
+  answer: "<script>",
   },
   {
-    question: "What is the correct syntax for referring to an external script called 'script.js'?",
-    a: "<script name='script.js'>",
-    b: "<script href='script.js'>",
-    c: "<script src='script.js'>",
-    d: "<script text='script.js'>",
-    answer: "c" 
+  question: "What is the correct syntax for referring to an external script called 'script.js'?",
+  options: ["<script name='script.js'>",
+            "<script href='script.js'>",
+            "<script src='script.js'>",
+            "<script text='script.js'>"],
+  answer: "<script src='script.js'>",
   },
   {
-    question: "How do you write 'Hello everyobdy!' in an alert box?",
-    a: "alert('Hello everybody!');",
-    b: "alertText('Hello everybody!');",
-    c: "alertBox('Hello everybody!');",
-    d: "alertPrompt('Hello everybody!');",
-    answer: "a" 
+  question: "How do you write 'Hello everybody!' in an alert box?",
+  options: ["alert('Hello everybody!');",
+            "alertText('Hello everybody!');",
+            "alertBox('Hello everybody!');",
+            "alertPrompt('Hello everybody!');"],
+  answer: "alert('Hello everybody!');",
   },
   {
-    question: "How do you call a function named 'startFunction'?",
-    a: "call startFunction()",
-    b: "get function startFunction()",
-    c: "execute startFunction()",
-    d: "startFunction()",
-    answer: "d" 
+  question: "How do you call a function named 'startFunction'?",
+  options: ["call startFunction( )",
+            "get function startFunction( )",
+            "execute startFunction( )",
+            "startFunction( )"],
+  answer: "startFunction( )"
   },
-  ];
+];
 
-  //function to get elements in HTML
-  function get(){
-    return document.getElementById();
-  }
+var score = 0;
+var questionIndex = 0;
+var currentTime = document.querySelector('#seconds');
+var questionContent = document.querySelector("#questions");
+var heading = document.querySelector(".heading");
+var penalty = 10;
+var ulCreate = document.createElement('ul');
+var startBtn = document.querySelector("#start-quiz");
+var seconds = document.querySelector("#seconds")
+var timeHeading = document.querySelector("#time");
+console.log(startBtn);
+var timeLeft = 80;
+var timeInterval=0;
 
-  //Function to display the question
-  function displayQuestion () {
-    var body = document.body;
-    var h1El = document.createElement('h1');
-    h1El.textContent = [questions];
-    body.appendChild(h1El);
-
-  }
-
-  //function to check the answer with for loop
-  function checkResponse () {
-
-  }
-
-  //display question as soon as the page loads
-  window.addEventListener('load', displayQuestion);
-
-  //contain the user's selected answer
-  var selAnswer 
-
-  // contains the possible answers to choose (A-D)
-  var choices 
-
-
-  // contains a possible answer
-  var ansA 
-
-  // contains a possible answer
-  var ansB 
-
-  // contains a possible answer
-  var ansC 
-
-  // contains a possible answer
-  var ansD 
-
-
-  var startBtn = document.querySelector("#start-quiz");
-
-  function countDown() {
-    var timeLeft = 80;
-
-    var timeInterval = setInterval(function() {
-      if(timeLeft > 1) {
-        p3El.textContent = timeLeft;
+startBtn.addEventListener("click", function () {
+    if (timeInterval === 0) {
+      timeInterval = setInterval(function () {
         timeLeft--;
-      } else if (timeLeft === 1) {
-        p3El.textContent = timeLeft;
-        timeLeft--;
+        seconds.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timeInterval);
+          quizCompleted();
+          timeHeading.textContent = "";
+          seconds.textContent = "Outta Time!";
+          seconds.setAttribute("style", "font-size: 25px");
+        }
+      }, 1000);
+    }
+    displayQuestion (questionIndex);
+  });
+
+function displayQuestion (questionIndex) {
+  questionContent.innerHTML = "";
+  ulCreate.innerHTML = "";
+  for (var i = 0; i <questions.length; i ++) {
+    var renderQuestion = questions[questionIndex].question;
+    var renderOptions = questions[questionIndex].options;
+    questionContent.textContent = renderQuestion;
+  }
+  renderOptions.forEach(function (newItem) {
+    var listItem = document.createElement("li");
+    listItem.textContent = newItem;
+    questionContent.appendChild(ulCreate);
+    ulCreate.appendChild(listItem);
+    listItem.addEventListener("click", (checkAnswer));
+  })
+}
+
+function checkAnswer(event) {
+  var element = event.target;
+
+  if (element.matches("li")) {
+
+      var createDiv = document.createElement("div");
+      createDiv.setAttribute("id", "createDiv");
+      if (element.textContent == questions[questionIndex].answer) {
+          score++;
+          createDiv.textContent = "Correct!";
       } else {
-        p3El.textContent = '';
-        clearInterval(timeInterval);
+            timeLeft = timeLeft - penalty;
+            createDiv.textContent = "Incorrect!";
       }
-    }, 1000);
+
+      questionIndex++;
+
+      if (questionIndex >= questions.length) {
+        quizCompleted();
+        createDiv.textContent = "You have finished the quiz! You got  " + score + "/" + questions.length + " correct!";
+      } else {
+        displayQuestion(questionIndex);
+      }
+      questionContent.appendChild(createDiv);
   }
-  btnEl.addEventListener("click", countDown);
-};
+}
+
+function quizCompleted () {
+  heading.innerHTML = "";
+  questionContent.innerHTML = "";
+  timeLeft.innerHTML = "";
+
+  var newH1 = document.createElement("h1");
+  newH1.setAttribute("id", "finalH1");
+  newH1.textContent = "The Quiz is Over!";
+
+  questionContent.appendChild(newH1);
+}
 
 
