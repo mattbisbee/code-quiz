@@ -66,7 +66,6 @@ var ulCreate = document.createElement('ul');
 var startBtn = document.querySelector("#start-quiz");
 var seconds = document.querySelector("#seconds")
 var timeHeading = document.querySelector("#time");
-console.log(startBtn);
 var timeLeft = 80;
 var timeInterval=0;
 
@@ -162,8 +161,10 @@ function quizCompleted () {
 
   var nameInput = document.createElement("input");
   nameInput.setAttribute("type", "text");
+  nameInput.setAttribute("id", "userInitials");
+  nameInput.textContent = "";
   nameInput.placeholder = "Enter your name/initials here!";
-  nameInput.setAttribute("style", "border: 2px solid black; font-size: 25px; text-align: center; border-radius:20px; background-color: lightblue; color: red; font-weight: bold; margin: 20px; padding: 20px; width: 80%;")
+  nameInput.setAttribute("style", "border: 2px solid black; font-size: 25px; text-align: center; border-radius:20px; background-color: lightblue; color: red; font-weight: bold; margin: 20px; padding: 20px; width: 80%;");
   questionContent.appendChild(nameInput);
 
   var scoreSubmit = document.createElement("button");
@@ -172,6 +173,40 @@ function quizCompleted () {
   scoreSubmit.textContent = "Submit";
   questionContent.appendChild(scoreSubmit);
 
+  scoreSubmit.addEventListener("click", function() {
+    var playerName = document.getElementById("userInitials").value;
+     {
+
+      var savedScore = {
+        initials: playerName,
+        score: timeScore
+      }
+      console.log(savedScore);
+      var savedScoreString = JSON.stringify(savedScore);
+      localStorage.setItem('savedScore', savedScoreString);
+
+      //var savedStringFromLocalStorage = localStorage.getItem('savedScore');
+      //var savedLocalStorageInfo = JSON.parse(savedStringFromLocalStorage);
+      //console.log(savedLocalStorageInfo);
+    }
+    highScores ();
+  });
+
+  function highScores () {
+    heading.innerHTML = "";
+    questionContent.innerHTML = "";
+    var newDiv = document.createElement("div");
+    newDiv.setAttribute("id", "highScoreDiv");
+    newDiv.nodeValue = nameInput, timeScore;
+    questionContent.appendChild(newDiv);
+
+    var storedInfoString = localStorage.getItem("savedScore");
+    var savedInfo = JSON.parse(storedInfoString);
+
+    document.getElementById("highScoreDiv").innerHTML = savedInfo;
+    console.log(savedInfo);
+
+  }
   var returnSubmit = document.createElement("button");
   returnSubmit.setAttribute("type", "submit");
   returnSubmit.setAttribute("style", "font-size: 30px; border-radius: 20px; background-color: orange; color: blue; padding: 10px; margin: auto; margin-top: 20px; display: block");
@@ -181,27 +216,4 @@ function quizCompleted () {
   returnSubmit.addEventListener("click", function() {
     window.location.replace("./index.html");
   })
-
-
-  /*scoreSubmit.addEventListener("click", function() {
-    var playerInit = newScore.value;
-    if (playerInit === null) {
-      alert('You must enter in your initials! Try Again');
-    } else {
-      var finalScore = {
-        playerInit: playerInit,
-        score: timeScore
-      }
-      var topScores = localStorage.getITem("topScores");
-      if (topScores === null) {
-        topScores = [];
-      } else {
-        topScores = JSON.parse(topScores);
-      }
-      topScores.push(finalScore);
-      var newScore = JSON.stringify(allScores);
-      localStorage.setItem("topScores", newScore);
-    }
-  })
-}*/
 }
