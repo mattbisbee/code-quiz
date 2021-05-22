@@ -60,6 +60,7 @@ var currentTime = document.querySelector('#seconds');
 var questionContent = document.querySelector("#questions");
 var heading = document.querySelector(".heading");
 var buttonWrapper = document.querySelector("#button-wrapper");
+var inputArea = document.querySelector("#userInitials")
 var penalty = 10;
 var points = 5;
 var ulCreate = document.createElement('ul');
@@ -92,11 +93,10 @@ function displayQuestion (questionIndex) {
   ulCreate.innerHTML = "";
   buttonWrapper.innerHTML = "";
 
-  for (var i = 0; i <questions.length; i ++) {
     var renderQuestion = questions[questionIndex].question;
     var renderOptions = questions[questionIndex].options;
     questionContent.textContent = renderQuestion;
-  }
+    
   renderOptions.forEach(function (newItem) {
     var listItem = document.createElement("li");
     listItem.textContent = newItem;
@@ -137,6 +137,21 @@ function checkAnswer(event) {
   }
 }
 
+function createInput () {
+  var nameInput = document.createElement("input");
+  nameInput.setAttribute("type", "text");
+  nameInput.setAttribute("id", "userInitials");
+  nameInput.placeholder = "Enter your name/initials here!";
+  nameInput.setAttribute("style", "border: 2px solid black; font-size: 25px; text-align: center; border-radius:20px; background-color: lightblue; color: red; font-weight: bold; margin: 20px; padding: 20px; width: 80%;");
+  questionContent.appendChild(nameInput);
+}
+
+function createDiv () {
+  var newDiv = document.createElement("div");
+  newDiv.setAttribute("id", "highScoreDiv");
+  questionContent.appendChild(newDiv);
+}
+
 function quizCompleted () {
   heading.innerHTML = "";
   questionContent.innerHTML = "";
@@ -158,14 +173,7 @@ function quizCompleted () {
     pTag.textContent = "Your score is " + timeScore;
     questionContent.appendChild(newPtag);
   }
-
-  var nameInput = document.createElement("input");
-  nameInput.setAttribute("type", "text");
-  nameInput.setAttribute("id", "userInitials");
-  nameInput.textContent = "";
-  nameInput.placeholder = "Enter your name/initials here!";
-  nameInput.setAttribute("style", "border: 2px solid black; font-size: 25px; text-align: center; border-radius:20px; background-color: lightblue; color: red; font-weight: bold; margin: 20px; padding: 20px; width: 80%;");
-  questionContent.appendChild(nameInput);
+  createInput();
 
   var scoreSubmit = document.createElement("button");
   scoreSubmit.setAttribute("type", "submit");
@@ -174,39 +182,9 @@ function quizCompleted () {
   questionContent.appendChild(scoreSubmit);
 
   scoreSubmit.addEventListener("click", function() {
-    var playerName = document.getElementById("userInitials").value;
-     {
-
-      var savedScore = {
-        initials: playerName,
-        score: timeScore
-      }
-      console.log(savedScore);
-      var savedScoreString = JSON.stringify(savedScore);
-      localStorage.setItem('savedScore', savedScoreString);
-
-      //var savedStringFromLocalStorage = localStorage.getItem('savedScore');
-      //var savedLocalStorageInfo = JSON.parse(savedStringFromLocalStorage);
-      //console.log(savedLocalStorageInfo);
-    }
     highScores ();
   });
 
-  function highScores () {
-    heading.innerHTML = "";
-    questionContent.innerHTML = "";
-    var newDiv = document.createElement("div");
-    newDiv.setAttribute("id", "highScoreDiv");
-    newDiv.nodeValue = nameInput, timeScore;
-    questionContent.appendChild(newDiv);
-
-    var storedInfoString = localStorage.getItem("savedScore");
-    var savedInfo = JSON.parse(storedInfoString);
-
-    document.getElementById("highScoreDiv").innerHTML = savedInfo;
-    console.log(savedInfo);
-
-  }
   var returnSubmit = document.createElement("button");
   returnSubmit.setAttribute("type", "submit");
   returnSubmit.setAttribute("style", "font-size: 30px; border-radius: 20px; background-color: orange; color: blue; padding: 10px; margin: auto; margin-top: 20px; display: block");
@@ -216,4 +194,32 @@ function quizCompleted () {
   returnSubmit.addEventListener("click", function() {
     window.location.replace("./index.html");
   })
+}
+
+function highScores () {
+  createInput();
+  createDiv();
+  heading.innerHTML = "";
+  questionContent.innerHTML = "";
+
+  var playerName = document.getElementById("userInitials");
+
+  var savedScore = {
+    initials: playerName,
+    score: timeLeft
+   }
+   console.log(savedScore);
+
+  var savedScoreString = JSON.stringify(savedScore);
+    localStorage.setItem('savedScore', savedScoreString);
+
+  var savedStringFromLocalStorage = localStorage.getItem('savedScore');
+  var savedLocalStorageInfo = JSON.parse(savedStringFromLocalStorage);
+   console.log(savedLocalStorageInfo);
+
+  var storedInfoString = localStorage.getItem("savedScore");
+  var savedInfo = JSON.parse(storedInfoString);
+
+  document.getElementById("questions").innerHTML = "<p>" + savedInfo.initials + ":" + savedInfo.score + "</p>";
+  console.log(savedInfo);
 }
