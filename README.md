@@ -14,9 +14,9 @@ I was tasked with creating a website that would take the player through a series
 This challenge was difficult for me. I was able to fulfil all the requirements except for the last part. I was not able to figure out a way to get the scores to save and display properly. I will continue to work on it and try to figure it out. As a side note, I was able to add a button at the end of the quiz that would take the player back to the beginning (this also aided me in testing the quiz) and also awards points/time for correct responses instead of just taking a penalty for incorrect answers.
 
 ### **Location:**
-Website can be found at : https://mattbisbee.github.io/  /
+Website can be found at : https://mattbisbee.github.io/code-quiz/
 
-GitHub: https://github.com/mattbisbee/
+GitHub: https://github.com/mattbisbee/code-quiz/
 
 ## **Images:**
 ![Screenshot](assets/capture.jpg)
