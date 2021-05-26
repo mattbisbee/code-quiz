@@ -73,3 +73,13 @@ ul {
   margin: 10px;
   border-top: 3px solid black;
 }
+
+#high-score {
+  display: inline-flex;
+  width: 100%;
+  margin: auto;
+  font-size: 25px;
+  background-color: blue;
+  color: white;
+  justify-content: space-evenly;
+}

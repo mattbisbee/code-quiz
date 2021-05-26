@@ -1,16 +1,3 @@
-/*GIVEN I am taking a code quiz
-WHEN I click the start button
-THEN a timer starts and I am presented with a question
-WHEN I answer a question
-THEN I am presented with another question
-WHEN I answer a question incorrectly
-THEN time is subtracted from the clock
-WHEN all questions are answered or the timer reaches 0
-THEN the game is over
-WHEN the game is over
-THEN I can save my initials and score */
-//will contain a question grabbed from an array
-
 var questions = [
   {
   question: "Commonly used data types DO NOT include:",
@@ -60,7 +47,6 @@ var currentTime = document.querySelector('#seconds');
 var questionContent = document.querySelector("#questions");
 var heading = document.querySelector(".heading");
 var buttonWrapper = document.querySelector("#button-wrapper");
-var inputArea = document.querySelector("#userInitials")
 var penalty = 10;
 var points = 5;
 var ulCreate = document.createElement('ul');
@@ -146,6 +132,7 @@ function createInput () {
   questionContent.appendChild(nameInput);
 }
 
+
 function createDiv () {
   var newDiv = document.createElement("div");
   newDiv.setAttribute("id", "highScoreDiv");
@@ -182,7 +169,8 @@ function quizCompleted () {
   questionContent.appendChild(scoreSubmit);
 
   scoreSubmit.addEventListener("click", function() {
-    highScores ();
+    scoreBoard ();
+
   });
 
   var returnSubmit = document.createElement("button");
@@ -196,30 +184,25 @@ function quizCompleted () {
   })
 }
 
-function highScores () {
-  createInput();
-  createDiv();
-  heading.innerHTML = "";
-  questionContent.innerHTML = "";
-
-  var playerName = document.getElementById("userInitials");
-
+function scoreBoard () {
+  var highScores = [];
+  var userInitialsValue = document.getElementById('userInitials').value;
   var savedScore = {
-    initials: playerName,
+    initials: userInitialsValue,
     score: timeLeft
-   }
-   console.log(savedScore);
+  };
+  highScores.push(savedScore);
 
-  var savedScoreString = JSON.stringify(savedScore);
-    localStorage.setItem('savedScore', savedScoreString);
+  highScores = highScores.concat(JSON.parse(localStorage.getItem('highScores') || '[]'));
 
-  var savedStringFromLocalStorage = localStorage.getItem('savedScore');
-  var savedLocalStorageInfo = JSON.parse(savedStringFromLocalStorage);
-   console.log(savedLocalStorageInfo);
+  localStorage.setItem("highScores", JSON.stringify(highScores));
+  console.log(highScores);
 
-  var storedInfoString = localStorage.getItem("savedScore");
-  var savedInfo = JSON.parse(storedInfoString);
+  for (i = 0; i <highScores.length; i++) {
+    var newDiv = document.createElement("div");
+    newDiv.setAttribute("id", "high-score")
+    newDiv.innerHTML = highScores[i].initials + ":" + highScores[i].score;
+    document.body.appendChild(newDiv);
+  };
+};
 
-  document.getElementById("questions").innerHTML = "<p>" + savedInfo.initials + ":" + savedInfo.score + "</p>";
-  console.log(savedInfo);
-}
